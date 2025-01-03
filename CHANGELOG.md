@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
-- (List changes in progress before the next release)
+- Support for nested JSON in XML conversion.
+- Option to specify header labels in CSV output.
 
 ## [1.0.0] - 2025-01-03
 
