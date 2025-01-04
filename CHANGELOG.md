@@ -6,8 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
-- Support for nested JSON in XML conversion.
+- JSON to YAML Conversion.
 - Option to specify header labels in CSV output.
+
+## [1.0.1] - 2025-01-04
+
+### Added
+
+- Improved XML conversion with options for maximum depth and array handling (`wrap` or `index`).
+- Enhanced Markdown table generation with dynamic header extraction.
+- Better error handling for empty JSON arrays in `toMarkdownTable` and invalid inputs in `toXML`.
+- New file structure: Organized modules into dedicated files for better maintainability and scalability.
+
+### Fixed
+
+- Corrected edge cases in CSV output when handling missing keys.
 
 ## [1.0.0] - 2025-01-03
 
