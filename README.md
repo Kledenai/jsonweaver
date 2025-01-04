@@ -1,13 +1,13 @@
 # jsonweaver
 
-**jsonweaver** is a simple and powerful library for transforming JSON data into popular formats such as CSV, XML, and Markdown tables.
+**jsonweaver** is a powerful and easy-to-use library for transforming JSON data into popular formats such as CSV, XML, and Markdown tables.
 
 ## Features
 
-- 🚀 Convert JSON to CSV.
-- 📄 Generate Markdown tables from JSON.
-- 📂 Convert JSON to XML.
-- 🔧 Easy to use, compatible with JavaScript and TypeScript.
+- 🚀 Convert to CSV: Easily transform JSON arrays into CSV files.
+- 📄 Generate Markdown tables: Convert JSON arrays into neatly formatted Markdown tables.
+- 📂 Convert to XML: Transform JSON objects into well-structured XML.
+- 🔧 Compatible with JavaScript and TypeScript: Ideal for modern projects.
 
 ## Installation
 
@@ -76,23 +76,11 @@ console.log(markdownTable);
 
 ### API
 
-```typescript
-toCSV(json: object[]): string
-```
-
-Converts an array of JSON objects into a CSV string.
-
-```typescript
-toXML(json: object): string
-```
-
-Converts a JSON object into an XML string.
-
-```typescript
-toMarkdownTable(json: object[]): string
-```
-
-Converts an array of JSON objects into a Markdown table.
+| Function                          | Description                                                        |
+| --------------------------------- | ------------------------------------------------------------------ |
+| `toCSV(json: object[])`           | Converts an array of JSON objects into a CSV string.               |
+| `toXML(json: object)`             | Converts a JSON object into an XML string.                         |
+| `toMarkdownTable(json: object[])` | Converts an array of JSON objects into a formatted Markdown table. |
 
 ### Requirements
 
