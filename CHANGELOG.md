@@ -7,7 +7,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 - JSON to YAML Conversion.
-- Option to specify header labels in CSV output.
+
+## [1.0.2] - 2025-01-06
+
+### Added
+
+- Custom header labels for CSV: Allows specifying friendly column names instead of using raw JSON keys.
+- Nested object flattening in CSV: Transforms nested fields (e.g. `details.age`) into separate columns.
+- Type-based CSV output: Numbers are unquoted, strings are quoted, and `null/undefined` fields are left empty.
+- Large dataset test coverage: Ensures performance and correctness for bigger JSON arrays.
+
+### Fixed
+
+- Incorrectly quoted numeric fields in CSV outputs.
+- Inconsistent handling of empty or null fields when generating CSV.
 
 ## [1.0.1] - 2025-01-04
 
