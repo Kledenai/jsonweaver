@@ -1,4 +1,3 @@
-import { Parser } from 'json2csv';
 import { FieldGenerator, HeaderMapping, JSONArray, JSONObject } from '../types';
 
 const defaultCSVFieldGenerator: FieldGenerator = (json) => {
