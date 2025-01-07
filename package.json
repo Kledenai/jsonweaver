@@ -1,6 +1,6 @@
 {
   "name": "jsonweaver",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A simple utility to transform JSON data into CSV, XML, and Markdown table formats.",
   "keywords": [
     "json",
