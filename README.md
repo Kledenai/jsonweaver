@@ -4,10 +4,10 @@
 
 ## Features
 
-- 🚀 Convert to CSV: Easily transform JSON arrays into CSV files.
-- 📄 Generate Markdown tables: Convert JSON arrays into neatly formatted Markdown tables.
-- 📂 Convert to XML: Transform JSON objects into well-structured XML.
-- 🔧 Compatible with JavaScript and TypeScript: Ideal for modern projects.
+- 🚀 **Convert to CSV**: Easily transform JSON arrays into CSV files, with optional header mapping and nested object flattening.
+- 📄 **Generate Markdown tables**: Convert JSON arrays into neatly formatted Markdown tables.
+- 📂 **Convert to XML**: Transform JSON objects into well-structured XML.
+- 🔧 **Compatible with JavaScript and TypeScript**: Ideal for modern projects.
 
 ## Installation
 
@@ -41,7 +41,7 @@ import { jsonweaver } from "jsonweaver";
 
 ### Examples
 
-JSON to CSV
+JSON to CSV (Basic usage, no custom headers, no flatten):
 
 ```javascript
 const json = [
@@ -51,6 +51,44 @@ const json = [
 
 const csv = jsonweaver.toCSV(json);
 console.log(csv);
+```
+
+Using custom headers (To rename the keys in the CSV "e.g., name → Full Name, age → Years"):
+
+```javascript
+const headerMapping = {
+  name: "Full Name",
+  age: "Years",
+};
+
+const csvWithHeaders = jsonweaver.toCSV(json, headerMapping);
+console.log(csvWithHeaders);
+/*
+  "Full Name","Years"
+  "Alice",25
+  "Bob",30
+*/
+```
+
+Flatten nested objects (If the JSON contains nested objects, for instance):
+
+```javascript
+const json = [
+  { name: "Alice", details: { age: 25, city: "Wonderland" } },
+  { name: "Bob", details: { age: 30, city: "Gotham" } },
+];
+```
+
+Then `toCSV` can transform nested fields into separate columns:
+
+```javascript
+const csvFlattened = jsonweaver.toCSV(json, headerMapping, { flatten: true });
+console.log(csvFlattened);
+/*
+  "name","details.age","details.city"
+  "Alice",25,"Wonderland"
+  "Bob",30,"Gotham"
+*/
 ```
 
 JSON to XML
@@ -76,11 +114,14 @@ console.log(markdownTable);
 
 ### API
 
-| Function                          | Description                                                        |
-| --------------------------------- | ------------------------------------------------------------------ |
-| `toCSV(json: object[])`           | Converts an array of JSON objects into a CSV string.               |
-| `toXML(json: object)`             | Converts a JSON object into an XML string.                         |
-| `toMarkdownTable(json: object[])` | Converts an array of JSON objects into a formatted Markdown table. |
+| Function                                   | Description                                                                                                         |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `toCSV(json: object[], headerMap?, opts?)` | Converts an array of JSON objects into a CSV string. Supports optional header mapping and nested object flattening. |
+| `toXML(json: object)`                      | Converts a JSON object into an XML string.                                                                          |
+| `toMarkdownTable(json: object[])`          | Converts an array of JSON objects into a formatted Markdown table.                                                  |
+
+**headerMap**: is an object mapping JSON keys to custom column labels.
+**opts?.flatten**: is a boolean indicating whether to flatten nested objects.
 
 ### Requirements
 
