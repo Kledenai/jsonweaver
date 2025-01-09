@@ -1,7 +1,7 @@
-import { FieldGenerator, HeaderMapping, JSONArray, JSONObject } from '../types';
+import { FieldGenerator, HeaderMapping, JsonArray, JsonObject } from '../types';
 
-const defaultCSVFieldGenerator: FieldGenerator = (json) => {
-  const allKeys = Array.from(new Set(json.flatMap(item => Object.keys(item))));
+const defaultCSVFieldGenerator: FieldGenerator = (Json) => {
+  const allKeys = Array.from(new Set(Json.flatMap(item => Object.keys(item))));
 
   return allKeys.map(key => ({
     label: key,
@@ -18,8 +18,8 @@ export const customCSVFieldGenerator = (headerMapping: HeaderMapping): FieldGene
   };
 };
 
-const flattenObject = (obj: JSONObject, prefix = ''): JSONObject => {
-  return Object.entries(obj).reduce((acc: JSONObject, [key, value]) => {
+const flattenObject = (obj: JsonObject, prefix = ''): JsonObject => {
+  return Object.entries(obj).reduce((acc: JsonObject, [key, value]) => {
     const newKey = prefix ? `${prefix}.${key}` : key;
 
     if (value && typeof value === 'object' && !Array.isArray(value)) {
@@ -32,26 +32,26 @@ const flattenObject = (obj: JSONObject, prefix = ''): JSONObject => {
   }, {});
 };
 
-const flattenJSON = (json: JSONArray): JSONArray => {
-  return json.map((item) => flattenObject(item as JSONObject));
+const flattenJson = (Json: JsonArray): JsonArray => {
+  return Json.map((item) => flattenObject(item as JsonObject));
 };
 
 export const toCSV = (
-  json: JSONArray,
+  Json: JsonArray,
   fieldGenerator: FieldGenerator = defaultCSVFieldGenerator
 ): string => {
-  if (json.length === 0) return '';
+  if (Json.length === 0) return '';
 
-  const flattenedJSON = flattenJSON(json);
+  const flattenedJson = flattenJson(Json);
 
-  const allObjectsEmpty = flattenedJSON.every(item => Object.keys(item).length === 0);
+  const allObjectsEmpty = flattenedJson.every(item => Object.keys(item).length === 0);
   if (allObjectsEmpty) return '';
 
-  const fields = fieldGenerator(flattenedJSON);
+  const fields = fieldGenerator(flattenedJson);
 
   const headers = fields.map(field => `"${field.label}"`).join(',');
 
-  const rows = flattenedJSON.map((row) =>
+  const rows = flattenedJson.map((row) =>
     fields
       .map((field) => {
         const value = row[field.value as string];

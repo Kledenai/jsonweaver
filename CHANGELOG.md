@@ -6,7 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
-- JSON to YAML Conversion.
+- JSON Schema Validation
+- Pretty-Print for XML Output
+- Batch Processing
+
+## [1.1.0] - 2025-01-09
+
+### Added
+
+- JSON to YAML Conversion: Added support for converting JSON to YAML for configurations like Kubernetes and Ansible.
+- JSON to JSONLines (NDJSON): Transform JSON arrays into JSONLines, ideal for incremental processing and data pipelines.
+- JSONLines Stream: Generate readable streams of JSONLines to handle large volumes of data efficiently.
+
+### Fixed
+
+- General improvements in input validation for existing functions.
+- Memory optimizations for large conversions.
 
 ## [1.0.2] - 2025-01-06
 

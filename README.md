@@ -1,12 +1,14 @@
 # jsonweaver
 
-**jsonweaver** is a powerful and easy-to-use library for transforming JSON data into popular formats such as CSV, XML, and Markdown tables.
+**jsonweaver** is a powerful and easy-to-use library for transforming JSON data into popular formats such as CSV, XML, Markdown tables, YAML, and JSONLines (NDJSON).
 
 ## Features
 
 - 🚀 **Convert to CSV**: Easily transform JSON arrays into CSV files, with optional header mapping and nested object flattening.
 - 📄 **Generate Markdown tables**: Convert JSON arrays into neatly formatted Markdown tables.
 - 📂 **Convert to XML**: Transform JSON objects into well-structured XML.
+- 📜 **Convert to YAML**: Seamlessly transform JSON into YAML format for configuration files and more.
+- 📦 **Convert to JSONLines (NDJSON)**: Convert JSON arrays to JSONLines format for large-scale data processing and streaming.
 - 🔧 **Compatible with JavaScript and TypeScript**: Ideal for modern projects.
 
 ## Installation
@@ -41,7 +43,7 @@ import { jsonweaver } from "jsonweaver";
 
 ### Examples
 
-JSON to CSV (Basic usage, no custom headers, no flatten):
+#### JSON to CSV (Basic usage, no custom headers, no flatten):
 
 ```javascript
 const json = [
@@ -91,7 +93,7 @@ console.log(csvFlattened);
 */
 ```
 
-JSON to XML
+#### JSON to XML
 
 ```javascript
 const json = { name: "Alice", age: 25, city: "Wonderland" };
@@ -100,7 +102,7 @@ const xml = jsonweaver.toXML(json);
 console.log(xml);
 ```
 
-JSON to Markdown Table
+#### JSON to Markdown Table
 
 ```javascript
 const json = [
@@ -112,6 +114,55 @@ const markdownTable = jsonweaver.toMarkdownTable(json);
 console.log(markdownTable);
 ```
 
+#### JSON to YAML
+
+```javascript
+const json = { name: "Alice", age: 25, city: "Wonderland" };
+
+const yaml = jsonweaver.toYaml(json);
+console.log(yaml);
+/*
+name: Alice
+age: 25
+city: Wonderland
+*/
+```
+
+#### JSON to JSONLines (NDJSON)
+
+```javascript
+const json = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+];
+
+const jsonLines = jsonweaver.toJsonLines(json);
+console.log(jsonLines);
+/*
+{"name":"Alice","age":25}
+{"name":"Bob","age":30}
+*/
+```
+
+JSON to JSONLines Stream
+
+```javascript
+const json = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 30 },
+];
+
+const stream = jsonweaver.toJsonLinesStream(json);
+
+stream.on("data", (chunk) => {
+  console.log(chunk.toString());
+});
+
+stream.on("end", () => {
+  console.log("Stream ended.");
+});
+```
+
 ### API
 
 | Function                                   | Description                                                                                                         |
@@ -119,6 +170,9 @@ console.log(markdownTable);
 | `toCSV(json: object[], headerMap?, opts?)` | Converts an array of JSON objects into a CSV string. Supports optional header mapping and nested object flattening. |
 | `toXML(json: object)`                      | Converts a JSON object into an XML string.                                                                          |
 | `toMarkdownTable(json: object[])`          | Converts an array of JSON objects into a formatted Markdown table.                                                  |
+| `toYaml(json: object)`                     | Converts a JSON object into a YAML string.                                                                          |
+| `toJsonLines(json: object[])`              | Converts an array of JSON objects into JSONLines (NDJSON) format.                                                   |
+| `toJsonLinesStream(json: object[])`        | Creates a readable stream of JSONLines from an array of JSON objects.                                               |
 
 **headerMap**: is an object mapping JSON keys to custom column labels.
 **opts?.flatten**: is a boolean indicating whether to flatten nested objects.
