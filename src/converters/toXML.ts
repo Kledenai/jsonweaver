@@ -1,7 +1,7 @@
 import { create } from 'xmlbuilder';
-import { ToXMLOptions, JSONObject } from '../types';
+import { ToXmlOptions, JsonObject } from '../types';
 
-export const toXML = (json: JSONObject, options: ToXMLOptions = {}): string => {
+export const toXML = (json: JsonObject, options: ToXmlOptions = {}): string => {
   if (typeof json !== 'object' || Array.isArray(json)) {
     throw new Error('Input must be a JSON object (not an array or primitive).');
   }
@@ -17,13 +17,13 @@ export const toXML = (json: JSONObject, options: ToXMLOptions = {}): string => {
       if (arrayHandling === 'wrap') {
         return { item: obj.map((item) => buildXML(item, depth + 1)) };
       } else if (arrayHandling === 'index') {
-        return obj.reduce((acc: JSONObject, item, index) => {
+        return obj.reduce((acc: JsonObject, item, index) => {
           acc[`item${index}`] = buildXML(item, depth + 1);
           return acc;
         }, {});
       }
     } else if (typeof obj === 'object' && obj !== null) {
-      return Object.entries(obj).reduce((acc: JSONObject, [key, value]) => {
+      return Object.entries(obj).reduce((acc: JsonObject, [key, value]) => {
         acc[key] = buildXML(value, depth + 1);
         return acc;
       }, {});
