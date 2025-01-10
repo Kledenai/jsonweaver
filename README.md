@@ -1,3 +1,5 @@
+![npm version](https://img.shields.io/npm/v/jsonweaver)
+
 # jsonweaver
 
 **jsonweaver** is a powerful and easy-to-use library for transforming JSON data into popular formats such as CSV, XML, Markdown tables, YAML, and JSONLines (NDJSON).
