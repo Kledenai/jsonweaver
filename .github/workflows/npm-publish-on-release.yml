@@ -9,42 +9,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        cache: 'npm'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
 
-    - name: Cache npm dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-    - name: Run tests
-      run: |
-        npm ci
-        npm test
+      - name: Run tests
+        run: |
+          npm ci
+          npm test
 
-    - name: Validate package version
-      run: |
-        CURRENT_VERSION=$(npm show . version)
-        NEW_VERSION=$(node -p "require('./package.json').version")
-        if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
-          echo "The version $NEW_VERSION is already published. Exiting."
-          exit 1
-        fi
+      - name: Validate package version
+        run: |
+          CURRENT_VERSION=$(npm show . version)
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
+            echo "The version $NEW_VERSION is already published. Exiting."
+            exit 1
+          fi
 
-    - name: Authenticate to npm
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Authenticate to npm
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-    - name: Publish to npm
-      run: |
-        npm ci
-        npm publish --access public --loglevel verbose
+      - name: Publish to npm
+        run: |
+          npm ci
+          npm publish --access public --loglevel verbose
