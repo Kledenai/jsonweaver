@@ -1,4 +1,4 @@
-![npm version](https://img.shields.io/npm/v/jsonweaver)
+[![npm version](https://img.shields.io/npm/v/jsonweaver)](https://www.npmjs.com/package/jsonweaver)
 
 # jsonweaver
 
