@@ -10,6 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Pretty-Print for XML Output
 - Batch Processing
 
+## [1.1.1] - 2025-01-10
+
+### Added
+
+- Automation using GitHub Actions to automatically publish to npm when a new release is created.
+- Validates package version to prevent publishing duplicate versions.
+- Executes automated tests (`npm test`) to ensure package stability.
+- Adds dependency caching to improve CI/CD performance.
+- Configures npm authentication automatically via `.npmrc`.
+
 ## [1.1.0] - 2025-01-09
 
 ### Added
