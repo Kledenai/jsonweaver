@@ -1,6 +1,7 @@
 {
   "name": "jsonweaver",
   "version": "1.1.2",
+  "type": "module",
   "description": "A simple utility to transform JSON data into CSV, XML, YAML, JSONLines and Markdown table formats.",
   "keywords": [
     "csv",
@@ -27,8 +28,15 @@
   },
   "homepage": "https://github.com/kledenai/jsonweaver#readme",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
