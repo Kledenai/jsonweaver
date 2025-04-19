@@ -10,6 +10,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Pretty-Print for XML Output
 - Batch Processing
 
+## [1.1.2] - 2025-04-19
+
+### Added
+
+- Updated package.json to support both ESM and CJS using exports field and type: module.
+- Updated Jest config to support ESM with --experimental-vm-modules.
+- Adjusted tsconfig.json for compatibility with new build setup.
+- Migrated build system to tsup for faster and modern bundling.
+- Improved GitHub Actions workflow for release publishing.
+- Refactored core imports to use import type syntax.
+- New tsup.config.ts file.
+
 ## [1.1.1] - 2025-01-10
 
 ### Added
