@@ -1,5 +1,5 @@
 import * as yaml from 'js-yaml';
-import { CustomErrorType, JsonObject, toYamlOptions } from '../types';
+import type { CustomErrorType, JsonObject, toYamlOptions } from '../types';
 import { createCustomError } from '../utils/errors';
 
 export function toYaml(jsonInput: string | JsonObject, options?: toYamlOptions): string {

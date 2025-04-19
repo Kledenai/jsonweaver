@@ -1,4 +1,4 @@
-import { CustomErrorType } from "../types";
+import type { CustomErrorType } from "../types";
 
 export function createCustomError(message: string, code: number): CustomErrorType {
   return { message, code };

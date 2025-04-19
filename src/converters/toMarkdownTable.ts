@@ -1,4 +1,4 @@
-import { JsonArray } from '../types';
+import type { JsonArray } from '../types';
 
 export const toMarkdownTable = (json: JsonArray): string => {
   if (json.length === 0) {

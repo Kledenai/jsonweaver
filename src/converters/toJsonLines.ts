@@ -1,5 +1,5 @@
 import { Readable } from 'stream';
-import { JsonLinesObject, ToJsonLinesOptions } from '../types';
+import type { JsonLinesObject, ToJsonLinesOptions } from '../types';
 
 export function toJsonLines(
   jsonArray: JsonLinesObject[],

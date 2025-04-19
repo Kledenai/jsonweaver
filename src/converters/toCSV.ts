@@ -1,4 +1,4 @@
-import { FieldGenerator, HeaderMapping, JsonArray, JsonObject } from '../types';
+import type { FieldGenerator, HeaderMapping, JsonArray, JsonObject } from '../types';
 
 const defaultCSVFieldGenerator: FieldGenerator = (Json) => {
   const allKeys = Array.from(new Set(Json.flatMap(item => Object.keys(item))));

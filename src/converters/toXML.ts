@@ -1,5 +1,5 @@
 import { create } from 'xmlbuilder';
-import { ToXmlOptions, JsonObject } from '../types';
+import type { ToXmlOptions, JsonObject } from '../types';
 
 export const toXML = (json: JsonObject, options: ToXmlOptions = {}): string => {
   if (typeof json !== 'object' || Array.isArray(json)) {
