@@ -1,21 +1,22 @@
-import { customCSVFieldGenerator, toCSV } from '../src/converters/toCSV';
+import { toCSV, customCSVFieldGenerator } from '../src/converters/toCSV';
 
 describe('toCSV Function', () => {
   it('should convert JSON to CSV', () => {
-    const json = [{ name: 'Alice', age: 25 }, { name: 'Bob', age: 30 }];
+    const json = [
+      { name: 'Alice', age: 25 },
+      { name: 'Bob', age: 30 },
+    ];
     const csv = toCSV(json);
-  
+
     const expectedCSV = `"name","age"
 "Alice",25
 "Bob",30`;
-  
+
     expect(csv).toBe(expectedCSV);
   });
-  
 
   it('should return empty string for empty JSON array', () => {
-    const json: [] = [];
-    const csv = toCSV(json);
+    const csv = toCSV([]);
 
     expect(csv).toBe('');
   });
@@ -27,26 +28,28 @@ describe('toCSV Function', () => {
       { name: 'Charlie', age: 30, city: 'New York' },
     ];
     const csv = toCSV(json);
-  
+
     const expectedCSV = `"name","age","city"
 "Alice",25,
 "Bob",,
 "Charlie",30,"New York"`;
-  
+
     expect(csv).toBe(expectedCSV);
-  });  
+  });
 
   it('should handle JSON with null or undefined values', () => {
-    const json = [{ name: 'Alice', age: null }, { name: undefined, age: 30 }];
+    const json = [
+      { name: 'Alice', age: null },
+      { name: undefined, age: 30 },
+    ];
     const csv = toCSV(json);
-  
+
     const expectedCSV = `"name","age"
 "Alice",
 ,30`;
-  
+
     expect(csv).toBe(expectedCSV);
   });
-  
 
   it('should use custom field generator with header mapping', () => {
     const json = [
@@ -88,21 +91,20 @@ describe('toCSV Function', () => {
       { name: 'Bob', description: 'Enjoys, "coding"' },
     ];
     const csv = toCSV(json);
-  
+
     const expectedCSV = `"name","description"
 "Alice","Likes ""cats"" and, dogs."
 "Bob","Enjoys, ""coding"""`;
-  
+
     expect(csv).toBe(expectedCSV);
   });
-  
 
   it('should handle an array of arrays instead of objects', () => {
     const json = [
       ['Name', 'Age', 'City'],
       ['Alice', 25, 'New York'],
       ['Bob', 30, 'Los Angeles'],
-    ] as any;
+    ] as any; // intentionally allowing invalid structure to test
 
     const csv = toCSV(json);
 
@@ -114,7 +116,7 @@ describe('toCSV Function', () => {
     expect(csv).toBe(expectedCSV);
   });
 
-  it('should handle data with a single object', () => {
+  it('should handle a single object correctly', () => {
     const json = [{ name: 'Alice', age: 25 }];
     const csv = toCSV(json);
 
@@ -124,7 +126,7 @@ describe('toCSV Function', () => {
     expect(csv).toBe(expectedCSV);
   });
 
-  it('should handle an array with only one key in some objects', () => {
+  it('should handle an array with sparse object keys', () => {
     const json = [
       { name: 'Alice' },
       { name: 'Bob' },
@@ -152,13 +154,14 @@ describe('toCSV Function', () => {
       id: i + 1,
       value: `Value ${i + 1}`,
     }));
+
     const csv = toCSV(json);
-  
+
     const expectedCSV = [
       `"id","value"`,
-      ...Array.from({ length: 1000 }, (_, i) => `${i + 1},"Value ${i + 1}"`),
+      ...Array.from({ length: 1000 }, (_, i) => `${i + 1},"Value ${i + 1}"`)
     ].join('\n');
-  
+
     expect(csv).toBe(expectedCSV);
-  });  
+  });
 });
