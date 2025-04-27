@@ -1,6 +1,6 @@
 import type { JsonArray } from '../types';
 
-export const toMarkdownTable = (json: JsonArray): string => {
+export default function toMarkdownTable (json: JsonArray): string {
   if (json.length === 0) {
     throw new Error('Input JSON array is empty.');
   }

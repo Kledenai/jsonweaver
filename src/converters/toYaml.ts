@@ -1,8 +1,8 @@
 import * as yaml from 'js-yaml';
 import type { CustomErrorType, JsonObject, toYamlOptions } from '../types';
-import { createCustomError } from '../utils/errors';
+import createCustomError from '../utils/helpers/createCustomError';
 
-export function toYaml(jsonInput: string | JsonObject, options?: toYamlOptions): string {
+export default function toYaml(jsonInput: string | JsonObject, options?: toYamlOptions): string {
   const { sortKeys = false, noRefs = true } = options || {};
   let jsonData: JsonObject;
 
