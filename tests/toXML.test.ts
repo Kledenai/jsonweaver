@@ -1,49 +1,48 @@
-import { toXML } from '../src/converters/toXML';
+import toXML from '../src/converters/toXML';
 
-describe('toXML Function', () => {
-  it('should convert JSON to XML', () => {
+describe('toXML', () => {
+  it('should convert a simple JSON object to XML', () => {
     const json = { name: 'Alice', age: 25, city: 'Wonderland' };
     const xml = toXML(json);
 
-    const expectedXML = `
+    const expected = `
 <root>
   <name>Alice</name>
   <age>25</age>
   <city>Wonderland</city>
 </root>`.trim();
 
-    expect(xml).toBe(expectedXML);
+    expect(xml).toBe(expected);
   });
 
-  it('should handle empty JSON', () => {
+  it('should handle an empty JSON object', () => {
     const json = {};
     const xml = toXML(json);
 
-    const expectedXML = `
-<root/>`.trim();
+    const expected = `<root/>`;
 
-    expect(xml).toBe(expectedXML);
+    expect(xml).toBe(expected);
   });
 
-  it('should handle JSON with null and undefined values', () => {
+  it('should handle JSON with null and undefined values gracefully', () => {
     const json = { name: 'Alice', age: null, city: undefined };
     const xml = toXML(json);
 
-    const expectedXML = `
+    const expected = `
 <root>
   <name>Alice</name>
   <age/>
   <city/>
 </root>`.trim();
 
-    expect(xml).toBe(expectedXML);
+    expect(xml).toBe(expected);
   });
 
-  it('should handle nested JSON', () => {
+  it('should handle deeply nested JSON objects', () => {
     const json = { person: { name: 'Alice', details: { age: 25, city: 'Wonderland' } } };
     const xml = toXML(json);
 
-    const expectedXML = `
+    const expected = `
 <root>
   <person>
     <name>Alice</name>
@@ -54,14 +53,14 @@ describe('toXML Function', () => {
   </person>
 </root>`.trim();
 
-      expect(xml).toBe(expectedXML);
-    });
+    expect(xml).toBe(expected);
+  });
 
-  it('should handle arrays with wrap mode', () => {
+  it('should handle arrays with wrap mode (default)', () => {
     const json = { people: ['Alice', 'Bob', 'Charlie'] };
     const xml = toXML(json, { arrayHandling: 'wrap' });
 
-    const expectedXML = `
+    const expected = `
 <root>
   <people>
     <item>Alice</item>
@@ -70,15 +69,14 @@ describe('toXML Function', () => {
   </people>
 </root>`.trim();
 
-    expect(xml).toBe(expectedXML);
-
+    expect(xml).toBe(expected);
   });
 
   it('should handle arrays with index mode', () => {
     const json = { people: ['Alice', 'Bob', 'Charlie'] };
     const xml = toXML(json, { arrayHandling: 'index' });
 
-    const expectedXML = `
+    const expected = `
 <root>
   <people>
     <item0>Alice</item0>
@@ -86,20 +84,19 @@ describe('toXML Function', () => {
     <item2>Charlie</item2>
   </people>
 </root>`.trim();
-  
-    expect(xml).toBe(expectedXML);
-  });
-  
 
-  it('should respect maxDepth option', () => {
+    expect(xml).toBe(expected);
+  });
+
+  it('should respect the maxDepth option', () => {
     const json = { person: { name: 'Alice', details: { age: 25, city: 'Wonderland' } } };
     const xml = toXML(json, { maxDepth: 1 });
 
-    const expectedXML = `
+    const expected = `
 <root>
   <person/>
 </root>`.trim();
 
-    expect(xml).toBe(expectedXML);
+    expect(xml).toBe(expected);
   });
 });
