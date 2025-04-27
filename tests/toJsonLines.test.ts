@@ -2,7 +2,7 @@ import { toJsonLines, toJsonLinesStream } from '../src/converters/toJsonLines';
 
 describe('toJsonLines', () => {
   it('should convert an array of JSON objects to JSONLines format', () => {
-    const jsonArray: Record<string, unknown>[] = [
+    const jsonArray = [
       { name: 'Alice', age: 25 },
       { name: 'Bob', age: 30 },
     ];
@@ -15,7 +15,7 @@ describe('toJsonLines', () => {
   });
 
   it('should handle nested objects and arrays', () => {
-    const jsonArray: Record<string, unknown>[] = [
+    const jsonArray = [
       { name: 'Alice', details: { age: 25, city: 'New York' } },
       { name: 'Bob', hobbies: ['reading', 'traveling'] },
     ];
@@ -27,8 +27,8 @@ describe('toJsonLines', () => {
     expect(result).toBe(expected);
   });
 
-  it('should handle different data types', () => {
-    const jsonArray: Record<string, unknown>[] = [
+  it('should handle different data types correctly', () => {
+    const jsonArray = [
       { number: 42, boolean: true, nullValue: null, emptyObject: {} },
     ];
 
@@ -38,12 +38,10 @@ describe('toJsonLines', () => {
     expect(result).toBe(expected);
   });
 
-  it('should handle an empty array', () => {
-    const jsonArray: Record<string, unknown>[] = [];
-    const expected = '';
-    const result = toJsonLines(jsonArray);
+  it('should return an empty string for an empty array', () => {
+    const result = toJsonLines([]);
 
-    expect(result).toBe(expected);
+    expect(result).toBe('');
   });
 
   it('should handle large volumes of data', () => {
@@ -55,19 +53,8 @@ describe('toJsonLines', () => {
     expect(result.endsWith('{"id":999}')).toBe(true);
   });
 
-  it('should handle numeric keys in objects', () => {
-    const jsonArray: Record<string, unknown>[] = [
-      { '123': 'value' },
-    ];
-
-    const expected = `{"123":"value"}`;
-    const result = toJsonLines(jsonArray);
-
-    expect(result).toBe(expected);
-  });
-
-  it('should exclude specified keys from the objects', () => {
-    const jsonArray: Record<string, unknown>[] = [
+  it('should correctly exclude specified keys', () => {
+    const jsonArray = [
       { name: 'Alice', age: 25, city: 'New York' },
       { name: 'Bob', age: 30, city: 'Los Angeles' },
     ];
@@ -79,11 +66,25 @@ describe('toJsonLines', () => {
 
     expect(result).toBe(expected);
   });
+
+  it('should handle numeric keys in objects', () => {
+    const jsonArray = [{ '123': 'value' }];
+
+    const expected = `{"123":"value"}`;
+    const result = toJsonLines(jsonArray);
+
+    expect(result).toBe(expected);
+  });
+
+  it('should throw an error if input is not an array', () => {
+    expect(() => toJsonLines(null as unknown as object[])).toThrow('Input must be an array of JSON objects.');
+    expect(() => toJsonLines({} as unknown as object[])).toThrow('Input must be an array of JSON objects.');
+  });
 });
 
 describe('toJsonLinesStream', () => {
   it('should create a readable stream of JSONLines', async () => {
-    const jsonArray: Record<string, unknown>[] = [
+    const jsonArray = [
       { name: 'Alice', age: 25 },
       { name: 'Bob', age: 30 },
     ];
@@ -98,11 +99,12 @@ describe('toJsonLinesStream', () => {
     const expected = `{"name":"Alice","age":25}
 {"name":"Bob","age":30}
 `;
+
     expect(chunks.join('')).toBe(expected);
   });
 
-  it('should handle nested objects and arrays in stream', async () => {
-    const jsonArray: Record<string, unknown>[] = [
+  it('should handle nested objects and arrays in the stream', async () => {
+    const jsonArray = [
       { name: 'Alice', details: { age: 25, city: 'New York' } },
       { name: 'Bob', hobbies: ['reading', 'traveling'] },
     ];
@@ -117,12 +119,12 @@ describe('toJsonLinesStream', () => {
     const expected = `{"name":"Alice","details":{"age":25,"city":"New York"}}
 {"name":"Bob","hobbies":["reading","traveling"]}
 `;
+
     expect(chunks.join('')).toBe(expected);
   });
 
-  it('should handle an empty array and produce an empty stream', async () => {
-    const jsonArray: Record<string, unknown>[] = [];
-    const stream = toJsonLinesStream(jsonArray);
+  it('should return an empty stream for an empty array', async () => {
+    const stream = toJsonLinesStream([]);
     const chunks: string[] = [];
 
     for await (const chunk of stream) {
@@ -132,9 +134,8 @@ describe('toJsonLinesStream', () => {
     expect(chunks.join('')).toBe('');
   });
 
-  it('should throw an error if the input is not an array', () => {
-    expect(() => toJsonLinesStream(null as unknown as Record<string, unknown>[])).toThrow(
-      'Input must be an array of JSON objects.'
-    );
+  it('should throw an error if input is not an array', () => {
+    expect(() => toJsonLinesStream(null as unknown as object[])).toThrow('Input must be an array of JSON objects.');
+    expect(() => toJsonLinesStream({} as unknown as object[])).toThrow('Input must be an array of JSON objects.');
   });
 });
