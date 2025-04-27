@@ -1,4 +1,4 @@
-name: Publish to npm and GitHub Packages on Release
+name: Publish to npm on Release
 
 on:
   release:
@@ -34,32 +34,16 @@ jobs:
 
       - name: Validate package version
         run: |
-          CURRENT_VERSION=$(npm show . version || echo "0.0.0")
+          CURRENT_VERSION=$(npm show $(node -p "require('./package.json').name") version || echo "0.0.0")
           NEW_VERSION=$(node -p "require('./package.json').version")
           if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
             echo "The version $NEW_VERSION is already published on npm. Skipping npm publish."
             exit 1
           fi
 
-      - name: Publish to npmjs.com
+      - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
           npm publish --access public --loglevel verbose
-
-      - name: Prepare GitHub Packages package.json
-        run: |
-          cp package.json package.original.json
-          jq '.name="@kledenai/jsonweaver" | .publishConfig={"registry":"https://npm.pkg.github.com/"}' package.json > package.tmp.json
-          mv package.tmp.json package.json
-
-      - name: Publish to GitHub Packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" > ~/.npmrc
-          npm publish --loglevel verbose
-
-      - name: Restore original package.json
-        run: mv package.original.json package.json
