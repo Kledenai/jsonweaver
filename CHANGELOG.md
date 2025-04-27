@@ -6,9 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
-- JSON Schema Validation
-- Pretty-Print for XML Output
-- Batch Processing
+- Optional support for custom flattening behavior in `toCSV`.
+- Options for customizing YAML output (indentation, quoting styles, etc).
+- Options for customizing Markdown table generation (alignment, style).
+- Support for custom root element name in XML generation.
+
+## [1.1.3] - 2025-04-27
+
+### Added
+
+- **JSON Schema Validation**: New `validateJsonSchema` function to validate JSON objects against provided schemas using AJV.
+- **Batch Processing**: New `batchProcess` function to divide and process large JSON arrays in batches asynchronously.
+- **Pretty-Print for XML**: XML output now supports customizable pretty formatting through the `prettyPrint` option.
+- **Flatten Helpers**: New modular helpers `flattenObject` and `flattenJson` to standardize object flattening across converters.
+- **Custom CSV Header Mapping**: `customCSVFieldGenerator` added for precise header customization in `toCSV`.
+- **Automatic Flattening in toCSV**: Nested JSON objects are automatically flattened in CSV output.
+- **Error Handling Improvements**: Better error messages and stricter input validation across all main converters.
+- **Improved Test Coverage**: Full unit test coverage for converters and internal helpers.
+
+### Changed
+
+- Internal refactor: Splitted converters and helpers into modular architecture (`@helpers`, `@converters`, etc).
+- Aliases introduced in tsconfig (`@converters`, `@utils`, `@types`) to improve import management and code clarity.
+- Updated internal types for stronger validation (`JsonArray`, `JsonObject`, etc).
+
+### Fixed
+
+- Correct flattening of deeply nested objects in CSV generation.
+- Proper handling of empty objects across all converters (returning safe outputs).
+- Small bug fixes and improvements for JSONLines stream generation.
 
 ## [1.1.2] - 2025-04-19
 
