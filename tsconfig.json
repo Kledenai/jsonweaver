@@ -1,5 +1,12 @@
 {
   "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@converters/*": ["converters/*"],
+      "@helpers/*": ["utils/helpers/*"],
+      "@types/*": ["types/*"],
+      "@utils/*": ["utils/*"]
+    },
     "strict": true,
     "target": "ES2022",
     "module": "ES2022",
