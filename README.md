@@ -11,6 +11,8 @@
 - 📂 **Convert to XML**: Transform JSON objects into well-structured XML.
 - 📜 **Convert to YAML**: Seamlessly transform JSON into YAML format for configuration files and more.
 - 📦 **Convert to JSONLines (NDJSON)**: Convert JSON arrays to JSONLines format for large-scale data processing and streaming.
+- 🛠️ **Batch processing**: Process large datasets in customizable batches.
+- 🔍 **Validate JSON with JSON Schema**: Ensure your JSON conforms to specified schemas.
 - 🔧 **Compatible with JavaScript and TypeScript**: Ideal for modern projects.
 
 ## Installation
@@ -31,13 +33,13 @@ yarn add jsonweaver
 
 ### Importing
 
-Javascript
+Javascript:
 
 ```javascript
 const { jsonweaver } = require("jsonweaver");
 ```
 
-TypeScript
+TypeScript:
 
 ```typescript
 import { jsonweaver } from "jsonweaver";
@@ -45,7 +47,7 @@ import { jsonweaver } from "jsonweaver";
 
 ### Examples
 
-#### JSON to CSV (Basic usage, no custom headers, no flatten):
+#### JSON to CSV (Basic usage)
 
 ```javascript
 const json = [
@@ -57,7 +59,7 @@ const csv = jsonweaver.toCSV(json);
 console.log(csv);
 ```
 
-Using custom headers (To rename the keys in the CSV "e.g., name → Full Name, age → Years"):
+Using custom headers (renaming keys):
 
 ```javascript
 const headerMapping = {
@@ -65,41 +67,29 @@ const headerMapping = {
   age: "Years",
 };
 
-const csvWithHeaders = jsonweaver.toCSV(json, headerMapping);
+const csvWithHeaders = jsonweaver.toCSV(
+  json,
+  jsonweaver.customCSVFieldGenerator(headerMapping)
+);
 console.log(csvWithHeaders);
-/*
-  "Full Name","Years"
-  "Alice",25
-  "Bob",30
-*/
 ```
 
-Flatten nested objects (If the JSON contains nested objects, for instance):
+Handling nested objects (automatic flattening):
 
 ```javascript
-const json = [
+const nestedJson = [
   { name: "Alice", details: { age: 25, city: "Wonderland" } },
   { name: "Bob", details: { age: 30, city: "Gotham" } },
 ];
-```
 
-Then `toCSV` can transform nested fields into separate columns:
-
-```javascript
-const csvFlattened = jsonweaver.toCSV(json, headerMapping, { flatten: true });
+const csvFlattened = jsonweaver.toCSV(nestedJson);
 console.log(csvFlattened);
-/*
-  "name","details.age","details.city"
-  "Alice",25,"Wonderland"
-  "Bob",30,"Gotham"
-*/
 ```
 
 #### JSON to XML
 
 ```javascript
 const json = { name: "Alice", age: 25, city: "Wonderland" };
-
 const xml = jsonweaver.toXML(json);
 console.log(xml);
 ```
@@ -111,7 +101,6 @@ const json = [
   { name: "Alice", age: 25 },
   { name: "Bob", age: 30 },
 ];
-
 const markdownTable = jsonweaver.toMarkdownTable(json);
 console.log(markdownTable);
 ```
@@ -120,14 +109,8 @@ console.log(markdownTable);
 
 ```javascript
 const json = { name: "Alice", age: 25, city: "Wonderland" };
-
 const yaml = jsonweaver.toYaml(json);
 console.log(yaml);
-/*
-name: Alice
-age: 25
-city: Wonderland
-*/
 ```
 
 #### JSON to JSONLines (NDJSON)
@@ -137,47 +120,60 @@ const json = [
   { name: "Alice", age: 25 },
   { name: "Bob", age: 30 },
 ];
-
 const jsonLines = jsonweaver.toJsonLines(json);
 console.log(jsonLines);
-/*
-{"name":"Alice","age":25}
-{"name":"Bob","age":30}
-*/
 ```
 
-JSON to JSONLines Stream
+JSON to JSONLines Stream:
 
 ```javascript
-const json = [
-  { name: "Alice", age: 25 },
-  { name: "Bob", age: 30 },
-];
-
 const stream = jsonweaver.toJsonLinesStream(json);
-
 stream.on("data", (chunk) => {
   console.log(chunk.toString());
 });
-
 stream.on("end", () => {
   console.log("Stream ended.");
 });
 ```
 
+#### Validate JSON Schema
+
+```javascript
+const schema = {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    age: { type: "number" },
+  },
+  required: ["name", "age"],
+};
+
+const data = { name: "Alice", age: 25 };
+jsonweaver.validateJsonSchema(data, schema);
+```
+
+#### Batch Processing
+
+```javascript
+const largeArray = Array.from({ length: 1000 }, (_, i) => ({ id: i }));
+
+await jsonweaver.batchProcess(largeArray, 100, async (batch, batchIndex) => {
+  console.log(`Processing batch ${batchIndex}`, batch);
+});
+```
+
 ### API
 
-| Function                                   | Description                                                                                                         |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `toCSV(json: object[], headerMap?, opts?)` | Converts an array of JSON objects into a CSV string. Supports optional header mapping and nested object flattening. |
-| `toXML(json: object)`                      | Converts a JSON object into an XML string.                                                                          |
-| `toMarkdownTable(json: object[])`          | Converts an array of JSON objects into a formatted Markdown table.                                                  |
-| `toYaml(json: object)`                     | Converts a JSON object into a YAML string.                                                                          |
-| `toJsonLines(json: object[])`              | Converts an array of JSON objects into JSONLines (NDJSON) format.                                                   |
-| `toJsonLinesStream(json: object[])`        | Creates a readable stream of JSONLines from an array of JSON objects.                                               |
-
-**headerMap**: is an object mapping JSON keys to custom column labels.
-**opts?.flatten**: is a boolean indicating whether to flatten nested objects.
+| Function                                                                                     | Description                                                  |
+| :------------------------------------------------------------------------------------------- | :----------------------------------------------------------- |
+| `toCSV(json: object[], fieldGenerator?)`                                                     | Converts an array of JSON objects into a CSV string.         |
+| `toXML(json: object, options?)`                                                              | Converts a JSON object into an XML string.                   |
+| `toMarkdownTable(json: object[])`                                                            | Converts an array of JSON objects into a Markdown table.     |
+| `toYaml(json: object)`                                                                       | Converts a JSON object into a YAML string.                   |
+| `toJsonLines(json: object[], options?)`                                                      | Converts an array of JSON objects into JSONLines format.     |
+| `toJsonLinesStream(json: object[])`                                                          | Creates a stream of JSONLines from an array of JSON objects. |
+| `validateJsonSchema(json: object, schema: object)`                                           | Validates a JSON object against a schema.                    |
+| `batchProcess(data: object[], batchSize: number, processor: (batch, index) => Promise<any>)` | Processes data in batches asynchronously.                    |
 
 ### Requirements
 
@@ -188,9 +184,9 @@ stream.on("end", () => {
 Feel free to open issues or submit pull requests to improve jsonweaver. All contributions are welcome! 🌟
 
 1. Fork the repository.
-2. Create a branch for your feature: git checkout -b my-feature.
-3. Make your changes and commit: git commit -m 'My awesome feature'.
-4. Push to the repository: git push origin my-feature.
+2. Create a branch for your feature: `git checkout -b my-feature`.
+3. Make your changes and commit: `git commit -m 'My awesome feature'`.
+4. Push to the repository: `git push origin my-feature`.
 5. Open a pull request on GitHub.
 
 ### License
