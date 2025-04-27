@@ -1,17 +1,15 @@
 import { create } from 'xmlbuilder';
 import type { ToXmlOptions, JsonObject } from '../types';
 
-export const toXML = (json: JsonObject, options: ToXmlOptions = {}): string => {
+export default function toXML (json: JsonObject, options: ToXmlOptions = {}): string {
   if (typeof json !== 'object' || Array.isArray(json)) {
     throw new Error('Input must be a JSON object (not an array or primitive).');
   }
 
-  const { maxDepth = Infinity, arrayHandling = 'wrap' } = options;
+  const { maxDepth = Infinity, arrayHandling = 'wrap', prettyPrint = true } = options;
 
   const buildXML = (obj: any, depth: number = 0): any => {
-    if (depth > maxDepth) {
-      return;
-    }
+    if (depth > maxDepth) return;
 
     if (Array.isArray(obj)) {
       if (arrayHandling === 'wrap') {
@@ -36,6 +34,5 @@ export const toXML = (json: JsonObject, options: ToXmlOptions = {}): string => {
 
   const wrappedJson = { root: buildXML(json) };
 
-  return create(wrappedJson, { headless: true }).end({ pretty: true });
+  return create(wrappedJson, { headless: true }).end({ pretty: prettyPrint });
 };
-
