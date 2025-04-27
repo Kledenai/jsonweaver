@@ -9,4 +9,5 @@ export default defineConfig({
   outDir: 'dist',
   target: 'es2022',
   skipNodeModulesBundle: true,
+  tsconfig: './tsconfig.build.json'
 })
