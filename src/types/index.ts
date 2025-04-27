@@ -8,6 +8,7 @@ export interface HeaderMapping {
 export type ToXmlOptions = {
   maxDepth?: number;
   arrayHandling?: 'wrap' | 'index';
+  prettyPrint?: boolean;
 };
 
 type Field = {
