@@ -1,4 +1,5 @@
-import type { FieldGenerator, HeaderMapping, JsonArray, JsonObject } from '../types';
+import type { FieldGenerator, HeaderMapping, JsonArray } from '../types';
+import flattenJson from '../utils/helpers/flattenJson';
 
 const defaultCSVFieldGenerator: FieldGenerator = (Json) => {
   const allKeys = Array.from(new Set(Json.flatMap(item => Object.keys(item))));
@@ -16,24 +17,6 @@ export const customCSVFieldGenerator = (headerMapping: HeaderMapping): FieldGene
       value: key
     }));
   };
-};
-
-const flattenObject = (obj: JsonObject, prefix = ''): JsonObject => {
-  return Object.entries(obj).reduce((acc: JsonObject, [key, value]) => {
-    const newKey = prefix ? `${prefix}.${key}` : key;
-
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      Object.assign(acc, flattenObject(value, newKey));
-    } else {
-      acc[newKey] = value;
-    }
-
-    return acc;
-  }, {});
-};
-
-const flattenJson = (Json: JsonArray): JsonArray => {
-  return Json.map((item) => flattenObject(item as JsonObject));
 };
 
 export const toCSV = (
